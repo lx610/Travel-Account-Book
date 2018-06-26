@@ -1,22 +1,26 @@
 package lx610.com.accountbook
 
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
-import android.widget.Button
-import android.widget.Toast
-import lx610.com.accountbook.R.id.bt_add_travel
+import lx610.com.accountbook.fragment.MainFragment
 
 class MainActivity : AppCompatActivity() {
+    var root: ConstraintLayout? = null;
 
-    var btAdd: Button? = null;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-         btAdd = findViewById(bt_add_travel);
+        root = findViewById(R.id.root);
 
-        btAdd!!.setOnClickListener{
-            Toast.makeText(this,"点击了",Toast.LENGTH_SHORT).show();
-        }
+        var ts : FragmentTransaction =supportFragmentManager.beginTransaction();
+        var fm : Fragment
+        fm = MainFragment();
+        ts.replace(R.id.root,fm);
+        ts.commit();
+
     }
 }
