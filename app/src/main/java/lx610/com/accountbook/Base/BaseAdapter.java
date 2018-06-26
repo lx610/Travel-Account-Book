@@ -21,6 +21,7 @@ public abstract class BaseAdapter<V extends RecyclerView.ViewHolder,D> extends R
     int currentPosition;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
+    OnItemClickListener<D,V> onItemtClickListener;
 
     public BaseAdapter(List<D> Data,int ResId) {
         mDataList = Data;
@@ -33,15 +34,23 @@ public abstract class BaseAdapter<V extends RecyclerView.ViewHolder,D> extends R
         RecyclerView.ViewHolder baseViewHolder = null;
         this.mContext = parent.getContext();
         this.mLayoutInflater = LayoutInflater.from(mContext);
-        View view = mLayoutInflater.inflate(layoutResID,parent);
+        View view = mLayoutInflater.inflate(layoutResID,parent,false);
         baseViewHolder = createBaseViewHolder(view);
         return baseViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
         currentPosition=position;
         bindData(holder, mDataList.get(position));
+        if (onItemtClickListener!=null){
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemtClickListener.onlick(position,mDataList.get(position),(V)holder);
+                }
+            });
+        }
 
     }
 
@@ -72,7 +81,7 @@ public abstract class BaseAdapter<V extends RecyclerView.ViewHolder,D> extends R
             temp = temp.getSuperclass();
         }
         V k = createGenericKInstance(z, view);
-        return null != k ? k : (V) new com.chad.library.adapter.base.BaseViewHolder(view);
+        return null != k ? k : (V) new BaseViewHolder(view);
     }
 
     /**
@@ -88,7 +97,7 @@ public abstract class BaseAdapter<V extends RecyclerView.ViewHolder,D> extends R
             for (Type temp : types) {
                 if (temp instanceof Class) {
                     Class tempClass = (Class) temp;
-                    if (com.chad.library.adapter.base.BaseViewHolder.class.isAssignableFrom(tempClass)) {
+                    if (BaseViewHolder.class.isAssignableFrom(tempClass)) {
                         return tempClass;
                     }
                 }
@@ -135,6 +144,7 @@ public abstract class BaseAdapter<V extends RecyclerView.ViewHolder,D> extends R
         public BaseViewHolder(View itemView) {
             super(itemView);
             rootView = itemView;
+            init();
         }
 
         public void setText(int ResId,String text){
@@ -146,5 +156,21 @@ public abstract class BaseAdapter<V extends RecyclerView.ViewHolder,D> extends R
            View view = rootView.findViewById(ResId);
            return view;
         }
+    }
+
+    private void init() {
+        initListener();
+    }
+
+    private void initListener() {
+
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        onItemtClickListener = listener;
+    }
+
+    public interface OnItemClickListener<D,V>{
+        void onlick(int position, D data, V rootView);
     }
 }

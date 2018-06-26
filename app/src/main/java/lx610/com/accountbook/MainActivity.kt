@@ -23,4 +23,10 @@ class MainActivity : AppCompatActivity() {
         ts.commit();
 
     }
+
+    fun changeFragmentTo( fragment:Fragment) {
+        var ts : FragmentTransaction =supportFragmentManager.beginTransaction();
+        ts.replace(R.id.root,fragment);
+        ts.commit();
+    }
 }
