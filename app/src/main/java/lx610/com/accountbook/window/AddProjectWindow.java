@@ -5,10 +5,15 @@ import android.view.View;
 import android.widget.TextView;
 
 import lx610.com.accountbook.Base.BasePopupWindow;
+import lx610.com.accountbook.Dao.ProjectListDaoHelper;
 import lx610.com.accountbook.R;
 
 public class AddProjectWindow extends BasePopupWindow {
 
+
+    private TextView mBt_ok;
+    private TextView mBt_cancel;
+    private TextView mEtConet;
 
     public AddProjectWindow(Context context) {
         super(context);
@@ -18,9 +23,26 @@ public class AddProjectWindow extends BasePopupWindow {
     protected void initView(Context context, View contentView) {
         TextView title = contentView.findViewById(R.id.title);
         TextView conentTitle = contentView.findViewById(R.id.content_title1);
-        TextView etConet = contentView.findViewById(R.id.et_content);
-        TextView bt_ok = contentView.findViewById(R.id.bt_ok);
-        TextView bt_cancel = contentView.findViewById(R.id.bt_cancel);
+        mEtConet = contentView.findViewById(R.id.et_content);
+        mBt_ok = contentView.findViewById(R.id.bt_ok);
+        mBt_cancel = contentView.findViewById(R.id.bt_cancel);
+        initListener();
+    }
+
+    private void initListener() {
+        mBt_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProjectListDaoHelper daoHelper = new ProjectListDaoHelper();
+                daoHelper.creatSql(mEtConet.getText().toString());
+            }
+        });
+        mBt_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
     }
 
     @Override
