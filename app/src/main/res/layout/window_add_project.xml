@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="250dp"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/title"
+            android:text="title"
+            android:textSize="18sp"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/content_title1"
+            android:text="title"
+            android:textSize="18sp"
+            android:gravity="center"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <EditText
+            android:id="@+id/et_content"
+            android:text=""
+            android:background="@null"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            app:layout_constraintLeft_toRightOf="@id/content_title1"
+            android:paddingLeft="10dp"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/bt_ok"
+            android:text="确定"
+            app:layout_constraintTop_toBottomOf="@id/content_title1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/bt_cancel"
+            android:text="取消"
+            app:layout_constraintTop_toBottomOf="@id/content_title1"
+            app:layout_constraintLeft_toRightOf="@id/bt_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

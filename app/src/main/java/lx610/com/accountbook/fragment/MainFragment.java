@@ -14,6 +14,7 @@ import lx610.com.accountbook.Base.BaseFragment;
 import lx610.com.accountbook.MainActivity;
 import lx610.com.accountbook.R;
 import lx610.com.accountbook.adapter.MainAdapter;
+import lx610.com.accountbook.window.AddProjectWindow;
 
 public class MainFragment extends BaseFragment {
 
@@ -21,12 +22,14 @@ public class MainFragment extends BaseFragment {
     private RecyclerView mList;
     private Button mBtAdd;
     private MainAdapter mAdapter;
+    private AddProjectWindow mWindow;
 
     @Override
     protected void initView(View rootView, Bundle savedInstanceState) {
         mBtAdd = rootView.findViewById(R.id.bt_add_travel);
         mList = rootView.findViewById(R.id.rv_tavel_list);
         mList.setLayoutManager(new LinearLayoutManager(getSafeActivity()));
+        mWindow = new AddProjectWindow(getSafeActivity());
     }
 
     @Override
@@ -40,6 +43,7 @@ public class MainFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getSafeActivity(),"点击了",Toast.LENGTH_SHORT).show();
+                mWindow.showWindow(getSafeActivity());
             }
         });
         mAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
