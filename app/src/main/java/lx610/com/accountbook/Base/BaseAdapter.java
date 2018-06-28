@@ -47,10 +47,21 @@ public abstract class BaseAdapter<V extends RecyclerView.ViewHolder,D> extends R
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemtClickListener.onlick(position,mDataList.get(position),(V)holder);
+                    onItemtClickListener.onClick(position,mDataList.get(position),(V)holder);
                 }
             });
         }
+
+        if (mOnItemLongClickListener!=null){
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    mOnItemLongClickListener.onlongClick(position,(D)mDataList.get(position),(V)holder);
+                    return true;
+                }
+            });
+        }
+
 
     }
 
@@ -171,6 +182,16 @@ public abstract class BaseAdapter<V extends RecyclerView.ViewHolder,D> extends R
     }
 
     public interface OnItemClickListener<D,V>{
-        void onlick(int position, D data, V rootView);
+        void onClick(int position, D data, V rootView);
+    }
+
+    public interface OnItemLongClickListener<D,V>{
+        void onlongClick(int position, D data, V rootView);
+    }
+
+    OnItemLongClickListener mOnItemLongClickListener;
+
+    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
+        mOnItemLongClickListener = onItemLongClickListener;
     }
 }

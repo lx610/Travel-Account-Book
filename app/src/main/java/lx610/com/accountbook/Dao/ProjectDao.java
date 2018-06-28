@@ -51,4 +51,12 @@ public class ProjectDao {
         }
         return projectList;
     }
+
+    public void deletProject(String targetProjectname){
+//        String projectName = PROJECT_NAME + "=";
+//        String[] tags=new String[]{targetProjectname};
+//        mDb.delete(TABLE_NAME_PROJECT,projectName,tags);
+        String deleteCmd = "Delete from " + TABLE_NAME_PROJECT +" where " + PROJECT_NAME + " = " + "\'" + targetProjectname + "\'";
+        mDb.execSQL(deleteCmd);
+    }
 }

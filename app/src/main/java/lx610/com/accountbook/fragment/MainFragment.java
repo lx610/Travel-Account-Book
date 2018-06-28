@@ -51,7 +51,7 @@ public class MainFragment extends BaseFragment {
         });
         mAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
-            public void onlick(int position, Object data, Object rootView) {
+            public void onClick(int position, Object data, Object rootView) {
                 MainActivity activity = (MainActivity) getSafeActivity();
                 activity.changeFragmentTo(new TravalDetailListFragment());
             }
@@ -64,6 +64,16 @@ public class MainFragment extends BaseFragment {
                 List<ProjectListBean> list = dao.query_project();
                 mProjectList.clear();
                 mProjectList.addAll(list);
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+
+        mAdapter.setOnItemLongClickListener(new BaseAdapter.OnItemLongClickListener<ProjectListBean,BaseAdapter.BaseViewHolder>() {
+            @Override
+            public void onlongClick(int position, ProjectListBean data, BaseAdapter.BaseViewHolder rootView) {
+                ProjectDao dao =new ProjectDao(getSafeActivity());
+                dao.deletProject(data.getProjectName());
+                mProjectList.remove(position);
                 mAdapter.notifyDataSetChanged();
             }
         });
