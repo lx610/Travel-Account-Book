@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.Button
 import lx610.com.accountbook.Base.BaseFragment
 import lx610.com.accountbook.R
-import lx610.com.accountbook.adapter.MainAdapter
 
 class TravalDetailListFragment : BaseFragment() {
   var  bt_add_record : Button?=null;
@@ -33,6 +32,6 @@ class TravalDetailListFragment : BaseFragment() {
         for (i in 1..10){
             list2.add("a");
         }
-        rv_travel_detail_list?.adapter = MainAdapter(list2);
+
     }
 }

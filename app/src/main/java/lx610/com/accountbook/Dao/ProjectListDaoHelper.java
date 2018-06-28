@@ -6,7 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
-import android.util.Log;
+
+import java.util.ArrayList;
+
+import lx610.com.accountbook.bean.PersonBean;
+import lx610.com.accountbook.bean.ProjectListBean;
 
 /**
  * 建立如下数据表格
@@ -17,11 +21,16 @@ import android.util.Log;
 public class ProjectListDaoHelper extends SQLiteOpenHelper {
 
     private final static String DATABASE_NAME = "POJECT.db";
-    private final static int DATABASE_VERSION = 1;
-    private final static String TABLE_NAME = "PROJECT_TABLE";
+    public final static int DATABASE_VERSION = 1;
+
+    private final static String TABLE_NAME_PROJECT = "table_project";
     public final static String PROJECT_ID = "project_id";
     public final static String PROJECT_NAME = "project_name";
     public final static String PROJECT_CREAT_DATE = "project_creat_date";
+    public final static String ID = "id";
+
+    private final static String TABLE_NAME_PERSON = "person_table";
+    public final static String  PERSON_NAME = "person_name";
 
 
     private SQLiteDatabase dataBase;
@@ -37,9 +46,14 @@ public class ProjectListDaoHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         dataBase = db;
-        String sql = "CREATE TABLE " + TABLE_NAME + " (" + PROJECT_ID
-                + " INTEGER primary key autoincrement, " + PROJECT_NAME + " text, "+ PROJECT_CREAT_DATE +" text);";
-        dataBase.execSQL(sql);
+        String create_project_table = "CREATE TABLE " + TABLE_NAME_PROJECT + " (" + ID
+                + " INTEGER primary key autoincrement, " + PROJECT_NAME + " text, "+ PROJECT_CREAT_DATE +" text,"+ PROJECT_ID + " integer" + ");";
+        dataBase.execSQL(create_project_table);
+
+        dataBase = db;
+        String create_person_table = "CREATE TABLE " + TABLE_NAME_PERSON + " (" + ID
+                + " INTEGER primary key autoincrement, " + PROJECT_NAME + " text, "+ PERSON_NAME +" text);";
+        dataBase.execSQL(create_person_table);
     }
 
     @Override
@@ -48,34 +62,66 @@ public class ProjectListDaoHelper extends SQLiteOpenHelper {
     }
 
     //增加操作
-    public long insert(String projectName,String creatDate)
+    public long insert_person_table(String projectName,String creat_time)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         /* ContentValues */
         ContentValues cv = new ContentValues();
         cv.put(PROJECT_NAME, projectName);
-        cv.put(PROJECT_CREAT_DATE, creatDate);
-        long row = db.insert(TABLE_NAME, null, cv);
+        cv.put(PROJECT_CREAT_DATE, creat_time);
+        long row = db.insert(TABLE_NAME_PERSON, null, cv);
         return row;
     }
 
-    public void getTableName(){
+    //增加操作
+    public long insert_project_table(String projectName,String personName)
+    {
         SQLiteDatabase db = this.getWritableDatabase();
-        // 相当于 select * from students 语句
-        Cursor cursor = db.query(TABLE_NAME, null,
-                "cls_id > ? and id >= 1", new String[]{"3"},
-                null, null, null, null);
+        /* ContentValues */
+        ContentValues cv = new ContentValues();
+        cv.put(PROJECT_NAME, projectName);
+        cv.put(PERSON_NAME, personName);
+        long row = db.insert(TABLE_NAME_PROJECT, null, cv);
+        return row;
+    }
 
-        // 不断移动光标获取值
-        while (cursor.moveToNext()) {
-            // 直接通过索引获取字段值
-            int stuId = cursor.getInt(0);
-
-            // 先获取 name 的索引值，然后再通过索引获取字段值
-            String stuName = cursor.getString(cursor.getColumnIndex("name"));
-            Log.e("", "id: " + stuId + " name: " + stuName);
+    public ArrayList<ProjectListBean> query_project(){
+        ArrayList<ProjectListBean> projectList = new ArrayList<>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_NAME_PROJECT,null,null,null,null,null,null);
+        if (cursor.moveToFirst()){
+            do {
+                ProjectListBean bean = new ProjectListBean();
+                String projectName = cursor.getString(cursor.getColumnIndex(PROJECT_NAME));
+                bean.setProjectName(projectName);
+                projectList.add(bean);
+            }while (cursor.moveToNext());
         }
-        // 关闭光标
-        cursor.close();
+        return projectList;
+    }
+
+    public ArrayList<PersonBean> query_person(String targetProjectName){
+        ArrayList<PersonBean> personList = new ArrayList<>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        String[] selectColum = {PROJECT_NAME};
+        String selectTion = "PROJECT_NAME = " + targetProjectName;
+        Cursor cursor = db.query(TABLE_NAME_PERSON,selectColum,selectTion,null,null,null,null);
+        if (cursor.moveToFirst()){
+            do {
+                PersonBean bean = new PersonBean();
+                String projectName = cursor.getString(cursor.getColumnIndex(PROJECT_NAME));
+                String personName = cursor.getString(cursor.getColumnIndex(PERSON_NAME));
+                bean.setProjectName(projectName);
+                bean.setPersonName(personName);
+                personList.add(bean);
+            }while (cursor.moveToNext());
+        }
+        return personList;
+    }
+
+    public void deletProject(String projectName){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String[] string = new String[]{projectName};
+        db.delete(TABLE_NAME_PROJECT,PROJECT_NAME + "==",string);
     }
 }

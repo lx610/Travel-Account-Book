@@ -7,13 +7,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import lx610.com.accountbook.Base.BaseAdapter;
 import lx610.com.accountbook.Base.BaseFragment;
+import lx610.com.accountbook.Dao.ProjectDao;
 import lx610.com.accountbook.MainActivity;
 import lx610.com.accountbook.R;
 import lx610.com.accountbook.adapter.MainAdapter;
+import lx610.com.accountbook.bean.ProjectListBean;
 import lx610.com.accountbook.window.AddProjectWindow;
 
 public class MainFragment extends BaseFragment {
@@ -23,6 +25,7 @@ public class MainFragment extends BaseFragment {
     private Button mBtAdd;
     private MainAdapter mAdapter;
     private AddProjectWindow mWindow;
+    private List<ProjectListBean> mProjectList;
 
     @Override
     protected void initView(View rootView, Bundle savedInstanceState) {
@@ -53,15 +56,27 @@ public class MainFragment extends BaseFragment {
                 activity.changeFragmentTo(new TravalDetailListFragment());
             }
         });
+
+        mWindow.setDataChangeListener(new AddProjectWindow.DataChangeListener() {
+            @Override
+            public void refreshData() {
+                ProjectDao dao =new ProjectDao(getSafeActivity());
+                List<ProjectListBean> list = dao.query_project();
+                mProjectList.clear();
+                mProjectList.addAll(list);
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
     protected void initData(Bundle savedInstanceState) {
-        ArrayList list = new ArrayList();
-        for (int i = 0; i < 10; i++) {
-            list.add(i +"");
-        }
-        mAdapter = new MainAdapter(list);
+        ProjectDao dao =new ProjectDao(getSafeActivity());
+        mProjectList = dao.query_project();
+//        for (int i = 0; i < 10; i++) {
+//            list.add(i +"");
+//        }
+        mAdapter = new MainAdapter(mProjectList);
         mList.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
     }

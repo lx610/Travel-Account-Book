@@ -1,19 +1,18 @@
 package lx610.com.accountbook.adapter;
 
-import android.support.v7.widget.RecyclerView;
-
 import java.util.List;
 
 import lx610.com.accountbook.Base.BaseAdapter;
 import lx610.com.accountbook.R;
+import lx610.com.accountbook.bean.ProjectListBean;
 
-public class MainAdapter extends BaseAdapter<BaseAdapter.BaseViewHolder,String> {
-    public MainAdapter(List<String> Data) {
+public class MainAdapter extends BaseAdapter<BaseAdapter.BaseViewHolder,ProjectListBean> {
+    public MainAdapter(List<ProjectListBean> Data) {
         super(Data, R.layout.item_main);
     }
 
     @Override
-    public void bindData(RecyclerView.ViewHolder holder, String o) {
-
+    public void bindData(BaseAdapter.BaseViewHolder holder, ProjectListBean o) {
+        holder.setText(R.id.title,o.getProjectName());
     }
 }

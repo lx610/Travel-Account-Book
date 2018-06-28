@@ -42,7 +42,7 @@ public abstract class BaseAdapter<V extends RecyclerView.ViewHolder,D> extends R
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
         currentPosition=position;
-        bindData(holder, mDataList.get(position));
+        bindData((V) holder, mDataList.get(position));
         if (onItemtClickListener!=null){
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -54,7 +54,7 @@ public abstract class BaseAdapter<V extends RecyclerView.ViewHolder,D> extends R
 
     }
 
-    public abstract void bindData(RecyclerView.ViewHolder holder, D d);
+    public abstract void bindData(V holder, D d);
 
     @Override
     public int getItemCount() {
