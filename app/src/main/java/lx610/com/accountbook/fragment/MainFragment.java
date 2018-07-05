@@ -1,5 +1,6 @@
 package lx610.com.accountbook.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import lx610.com.accountbook.Base.BaseFragment;
 import lx610.com.accountbook.Dao.ProjectDao;
 import lx610.com.accountbook.MainActivity;
 import lx610.com.accountbook.R;
+import lx610.com.accountbook.activity.ProjectDetailActivity;
 import lx610.com.accountbook.adapter.MainAdapter;
 import lx610.com.accountbook.bean.ProjectListBean;
 import lx610.com.accountbook.window.AddProjectWindow;
@@ -49,11 +51,14 @@ public class MainFragment extends BaseFragment {
                 mWindow.showWindow(getSafeActivity());
             }
         });
-        mAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener<ProjectListBean,BaseAdapter.BaseViewHolder>() {
             @Override
-            public void onClick(int position, Object data, Object rootView) {
+            public void onClick(int position, ProjectListBean data, BaseAdapter.BaseViewHolder rootView) {
                 MainActivity activity = (MainActivity) getSafeActivity();
-                activity.changeFragmentTo(new TravalDetailListFragment());
+//                activity.changeFragmentTo(new TravalDetailListFragment());
+                Intent intnet = new Intent(getSafeActivity(), ProjectDetailActivity.class);
+                intnet.putExtra(ProjectDao.PROJECT_NAME,data.getProjectName());
+                activity.startActivity(intnet);
             }
         });
 
